@@ -1,26 +1,28 @@
 pipeline{
-    agent any 
+    agent{
+        label "node"
+    }
     stages{
-        stage("cloning ..."){
-            steps{
-                sh 'echo hothaifa'
-
-            }
-        }
-        stage("building ..."){
+        stage("A"){
             steps{
                 echo "========executing A========"
             }
-        }
-        stage("testing ..."){
-            steps{
-                echo "========executing A========"
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========A executed successfully========"
+                }
+                failure{
+                    echo "========A execution failed========"
+                }
             }
         }
-        stage("deploying ..."){
-            steps{
-                echo "========executing A========"
-            }
+    }
+    post{
+        success{
+            sh 'docker build -t requestFromJenkins .'
         }
     }
 }
